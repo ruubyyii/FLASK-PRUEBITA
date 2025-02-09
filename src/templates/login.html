@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <body>
+        <h1>LOGIN</h1>
+        <form action="/login" method="post">
+            <div id="email">
+                <span>Email:</span>
+                <input type="email" name="email" id="">
+            </div>
+            <div id="password">
+                <span>Password:</span>
+                <input type="password" name="password" id="">
+            </div>
+            <button type="submit">Iniciar Sesion</button>
+        </form>
+        <a href="{{ url_for('index') }}">Aun no tienes cuenta? Registrate</a>
+    </body>
+{% endblock %}

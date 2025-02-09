@@ -3,11 +3,11 @@ from .entities.User import User
 class ModelUser():
 
     @classmethod
-    def login(cls, db, email):
+    def login(cls, db, user):
 
         try:
             cur = db.connection.cursor()
-            cur.execute('SELECT * FROM user WHERE email = %s', (email,))
+            cur.execute('SELECT * FROM users WHERE email = %s', (user.email,))
             datos = cur.fetchone()
 
             if datos:
@@ -15,7 +15,7 @@ class ModelUser():
                 id = datos[0]
                 username  = datos[1]
                 email = datos[2]
-                password = datos[3]
+                password = User.check_password(datos[3], user.password)
 
                 user = User(id, username, email, password)
 
@@ -48,8 +48,8 @@ class ModelUser():
 
         try:
             cur = db.connection.cursor()
-            cur.execute('SELECT id, username, email FROM user WHERE id = %s', (id))
-            datos = cursor.fetchone()
+            cur.execute('SELECT id, username, email FROM users WHERE id = %s', (id,))
+            datos = cur.fetchone()
 
             if datos:
 
