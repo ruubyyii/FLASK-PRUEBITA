@@ -5,8 +5,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from flask_wtf.csrf import CSRFProtect
 from models.ModelUser import ModelUser
 from models.entities.User import User
-from flask_mail import Mail, Message
-# from jwt import write_token, validate_token
+import smtplib
 
 app = Flask(__name__)
 db = MySQL(app)
@@ -14,22 +13,22 @@ login_manager_app = LoginManager(app)
 csrf = CSRFProtect()
 mail = Mail(app)
 
-# MANDAR CORREOS
-def sendMail(email):
-    print(f"MAIL_SERVER: {app.config['MAIL_SERVER']}")
-    print(f"MAIL_PORT: {app.config['MAIL_PORT']}")
-    print(f"MAIL_USE_TLS: {app.config['MAIL_USE_TLS']}")
-    print(f"MAIL_USE_SSL: {app.config['MAIL_USE_SSL']}")
-    print(f"MAIL_USERNAME: {app.config['MAIL_USERNAME']}")
-    print(f"MAIL_PASSWORD: {app.config['MAIL_PASSWORD']}") 
+# MANDAR MAILS 
 
-    msg = Message(
-        subject='Pruebita-Flask',
-        body="TUS MUERTOS.",
-        recipients=[email]
-    )
-    mail.send(msg)
-    return 'Email enviado.'
+def sendMail(email):
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login('voyaexplotar281024@gmail.com', 'qoicnybnjfhlntmu')
+
+    message = "Subject: Prueba\n\nTUS PUTOS MUERTOS."
+    server.sendmail(email, email, message)
+
+    server.quit()
+    print("Correo enviado con éxito")
+
+    return 'Correo enviado con éxito'
+
 
 
 @login_manager_app.user_loader
