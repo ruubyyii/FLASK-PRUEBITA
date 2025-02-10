@@ -5,11 +5,32 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from flask_wtf.csrf import CSRFProtect
 from models.ModelUser import ModelUser
 from models.entities.User import User
+from flask_mail import Mail, Message
+# from jwt import write_token, validate_token
 
 app = Flask(__name__)
 db = MySQL(app)
 login_manager_app = LoginManager(app)
 csrf = CSRFProtect()
+mail = Mail(app)
+
+# MANDAR CORREOS
+def sendMail(email):
+    print(f"MAIL_SERVER: {app.config['MAIL_SERVER']}")
+    print(f"MAIL_PORT: {app.config['MAIL_PORT']}")
+    print(f"MAIL_USE_TLS: {app.config['MAIL_USE_TLS']}")
+    print(f"MAIL_USE_SSL: {app.config['MAIL_USE_SSL']}")
+    print(f"MAIL_USERNAME: {app.config['MAIL_USERNAME']}")
+    print(f"MAIL_PASSWORD: {app.config['MAIL_PASSWORD']}") 
+
+    msg = Message(
+        subject='Pruebita-Flask',
+        body="TUS MUERTOS.",
+        recipients=[email]
+    )
+    mail.send(msg)
+    return 'Email enviado.'
+
 
 @login_manager_app.user_loader
 def load_user(id):
@@ -48,6 +69,7 @@ def login():
             if logged_user.password:
 
                 login_user(logged_user)
+                sendMail(logged_user.email)
                 return redirect(url_for('home'))
             else:
 
@@ -69,6 +91,12 @@ def login():
         #     return redirect(url_for('home'))
 
         return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash('Has cerrado sesion', 'info')
+    return redirect(url_for('login'))
 
     if request.method == 'GET':
         
