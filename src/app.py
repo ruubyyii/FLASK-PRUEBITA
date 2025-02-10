@@ -11,7 +11,6 @@ app = Flask(__name__)
 db = MySQL(app)
 login_manager_app = LoginManager(app)
 csrf = CSRFProtect()
-mail = Mail(app)
 
 # MANDAR MAILS 
 
@@ -21,14 +20,13 @@ def sendMail(email):
     server.starttls()
     server.login('voyaexplotar281024@gmail.com', 'qoicnybnjfhlntmu')
 
-    message = "Subject: Prueba\n\nTUS PUTOS MUERTOS."
-    server.sendmail(email, email, message)
+    message = "Subject: Flask-Pruebita\n\nTUS PUTOS MUERTOS."
+    server.sendmail('voyaexplotar281024@gmail.com', email, message)
 
     server.quit()
     print("Correo enviado con éxito")
 
     return 'Correo enviado con éxito'
-
 
 
 @login_manager_app.user_loader
